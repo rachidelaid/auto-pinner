@@ -1,7 +1,7 @@
 {
-  "name": "electron-quick-start",
+  "name": "auto-pinner",
   "version": "1.0.0",
-  "description": "A minimal Electron application",
+  "description": "fiverr to pinterest automation",
   "main": "main.js",
   "scripts": {
     "start": "electron ."
@@ -18,5 +18,27 @@
   "license": "CC0-1.0",
   "devDependencies": {
     "electron": "^10.1.1"
+  },
+  "dependencies": {
+    "image-downloader": "^4.0.1",
+    "lowdb": "^1.0.0",
+    "node-fetch": "^2.6.1",
+    "puppeteer-core": "^5.2.1",
+    "puppeteer-in-electron": "^3.0.3"
+  },
+  "build": {
+    "appId": "auto-pinner",
+    "win": {
+      "target": "portable",
+      "icon": "build/icon.ico"
+    },
+    "linux": {
+      "target": [
+        "AppImage",
+        "zip"
+      ],
+      "icon": "build/icon.png",
+      "category": "Internet"
+    }
   }
 }

@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no"
+    />
+    <!-- <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; script-src 'self'"
+    />
+    <meta
+      http-equiv="X-Content-Security-Policy"
+      content="default-src 'self'; script-src 'self'"
+    /> -->
+    <link href="./modesta.css" type="text/css" rel="stylesheet" />
+    <link href="./main.css" type="text/css" rel="stylesheet" />
+    <script src="./vue.min.js"></script>
+    <title>Auto Pinner</title>
+  </head>
+  <body class="secondary">
+    <main id="app">
+      <div class="box-container highlight-flat" id="setting">
+        <form>
+          <div class="col-xs-6">
+            <label>Affiliate ID</label>
+            <input
+              class="full-width"
+              type="text"
+              id="affiliateID"
+              v-model="affiliateID"
+            />
+          </div>
+          <div class="col-xs-6">
+            <label for="exampleSelect">Choose an account</label>
+            <select class="full-width" id="accounts">
+              <option v-for="(acc, i) in accounts" :key="i" :value="acc.user">
+                {{acc.user}}
+              </option>
+            </select>
+          </div>
+          <div class="box-container secondary-flat flex-grid" id="addAccount">
+            <div class="col-xs-6">
+              <label>email</label>
+              <input
+                class="full-width"
+                type="email"
+                id="pinUsername"
+                v-model="pinUsername"
+              />
+            </div>
+            <div class="col-xs-6">
+              <label>password</label>
+              <input
+                class="full-width"
+                type="password"
+                id="pinPassword"
+                v-model="pinPassword"
+              />
+            </div>
+            <a class="full-width btn hover-scale-inset highlight" @click="addAccount"
+              >Add Account</a
+            >
+          </div>
+          <div class="flex-grid">
+            <div class="col-xs-6">
+              <label>Delay in seconds</label>
+            </div>
+            <div class="col-xs-6">
+              <input
+                class="full-width"
+                type="number"
+                id="delay"
+                v-model="delay"
+              />
+            </div>
+            <div class="col-xs-6">
+              <label>Hide automation</label>
+            </div>
+            <div class="col-xs-6">
+              <select class="full-width" id="hidden">
+                <option value="true">true</option>
+                <option value="false">false</option>
+              </select>
+            </div>
+          </div>
+          <a class="btn hover-scale-inset npm right-btn" @click="save">Save</a>
+          <a class="btn hover-scale-inset secondary right-btn" @click="closeSetting">Cancel</a>
+        </form>
+      </div>
+
+      <div id="home">
+        <p style="padding: 0 5px;">count: {{lists.length}}</p>
+        <div class="box-container highlight-flat">
+          <div class="item" v-for="(list,i) in lists" :key="i">
+            <div class="item-content">
+              <img :src="list.img">
+              <label>{{list.title}}</label>
+            </div>
+            <div>
+              <a class="btn hover-scale-inset secondary svg-btn full-width" @click="edit(list, i)">
+                <svg style="width:24px;height:24px" viewBox="0 0 24 24">
+                  <path fill="currentColor" d="M20.71,7.04C21.1,6.65 21.1,6 20.71,5.63L18.37,3.29C18,2.9 17.35,2.9 16.96,3.29L15.12,5.12L18.87,8.87M3,17.25V21H6.75L17.81,9.93L14.06,6.18L3,17.25Z" />
+                </svg>
+              </a>
+            </div>
+          </div>
+        </div>
+        <div class="flex-grid">
+          <div class="col-xs-10">
+            <a class="btn hover-scale-inset npm full-width" @click="post">Post</a>
+          </div>
+          <div class="col-xs-1">
+            <a class="btn hover-scale-inset highlight svg-btn full-width" @click="loadJSON">
+              <svg style="width:24px;height:24px" viewBox="0 0 24 24">
+                <path fill="currentColor" d="M9,16V10H5L12,3L19,10H15V16H9M5,20V18H19V20H5Z" />
+            </svg>
+            </a>
+          </div>
+          <div class="col-xs-1" style="padding:0;">
+            <a class="btn hover-scale-inset highlight svg-btn full-width" @click="showSetting">
+              <svg style="width:24px;height:24px" viewBox="0 0 24 24">
+                <path fill="currentColor" d="M12,15.5A3.5,3.5 0 0,1 8.5,12A3.5,3.5 0 0,1 12,8.5A3.5,3.5 0 0,1 15.5,12A3.5,3.5 0 0,1 12,15.5M19.43,12.97C19.47,12.65 19.5,12.33 19.5,12C19.5,11.67 19.47,11.34 19.43,11L21.54,9.37C21.73,9.22 21.78,8.95 21.66,8.73L19.66,5.27C19.54,5.05 19.27,4.96 19.05,5.05L16.56,6.05C16.04,5.66 15.5,5.32 14.87,5.07L14.5,2.42C14.46,2.18 14.25,2 14,2H10C9.75,2 9.54,2.18 9.5,2.42L9.13,5.07C8.5,5.32 7.96,5.66 7.44,6.05L4.95,5.05C4.73,4.96 4.46,5.05 4.34,5.27L2.34,8.73C2.21,8.95 2.27,9.22 2.46,9.37L4.57,11C4.53,11.34 4.5,11.67 4.5,12C4.5,12.33 4.53,12.65 4.57,12.97L2.46,14.63C2.27,14.78 2.21,15.05 2.34,15.27L4.34,18.73C4.46,18.95 4.73,19.03 4.95,18.95L7.44,17.94C7.96,18.34 8.5,18.68 9.13,18.93L9.5,21.58C9.54,21.82 9.75,22 10,22H14C14.25,22 14.46,21.82 14.5,21.58L14.87,18.93C15.5,18.67 16.04,18.34 16.56,17.94L19.05,18.95C19.27,19.03 19.54,18.95 19.66,18.73L21.66,15.27C21.78,15.05 21.73,14.78 21.54,14.63L19.43,12.97Z" />
+            </a>
+          </div>
+        </div>
+      </div>
+      <div class="confirmJSON">
+        <div class="box-container secondary-flat">
+          <input type="file" id="jsonInput" style="display:none" accept=".json">
+          <label>Uploading new data</label>
+          <div class="flex-grid">
+            <div class="col-xs-4">
+              <a class="btn hover-scale-inset npm full-width" @click="cancelJSON">Cancel</a>
+            </div>
+            <div class="col-xs-4">
+              <a class="btn hover-scale-inset gitea full-width" @click="replaceJSON">Replace</a>
+            </div>
+            <div class="col-xs-4" style="padding-right: 19px !important;">
+              <a class="btn hover-scale-inset green-sea full-width" @click="appendJSON">Append</a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="editItem">
+        <div class="box-container secondary-flat" v-if="currentItem != null">
+          <a class="btn hover-scale-inset secondary svg-btn" id="close" @click="closeEdit">
+            <svg style="width:24px;height:24px" viewBox="0 0 24 24">
+              <path fill="currentColor" d="M19,6.41L17.59,5L12,10.59L6.41,5L5,6.41L10.59,12L5,17.59L6.41,19L12,13.41L17.59,19L19,17.59L13.41,12L19,6.41Z" />
+            </svg>
+          </a>
+
+          <label>Image</label>
+          <input class="full-width" type="text" v-model="currentItem.img">
+
+          <label>title</label>
+          <input class="full-width" type="text" v-model="currentItem.title" style="margin:0">
+          <p style="margin-bottom:7px;text-align:right" maxlength="80">{{currentItem.title.length}}/80</p>
+
+          <label>Description</label>
+          <textarea class="full-width" v-model="oldDesc"></textarea>
+
+          <label>New Description</label>
+          <textarea class="full-width" v-model="currentItem.newDesc" maxlength="500" style="margin:0"></textarea>
+          <p style="margin-bottom:7px;text-align:right" v-if="currentItem.newDesc">{{currentItem.newDesc.length}}/500</p>
+          <p style="margin-bottom:7px;text-align:right" v-else>0/500</p>
+
+          <div class="flex-grid">
+            <div class="col-xs-11">
+              <a class="btn hover-scale-inset gitea full-width" @click="saveItem()">Save Changes</a>
+            </div>
+            <div class="col-xs-1" style="padding: 0 !important;">
+              <a class="btn hover-scale-inset npm full-width svg-btn" @click="deleteItem(currentItem.link)">
+                <svg style="width:24px;height:24px" viewBox="0 0 24 24">
+                  <path fill="currentColor" d="M19,4H15.5L14.5,3H9.5L8.5,4H5V6H19M6,19A2,2 0 0,0 8,21H16A2,2 0 0,0 18,19V7H6V19Z" />
+                </svg>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="beforePosting">
+        <div class="box-container secondary-flat">
+          <div class="col-xs-6" style="width:100%">
+            <label>Board name</label>
+            <input
+              class="full-width"
+              type="text"
+              id="board"
+              v-model="boardUrl"
+            />
+          </div>
+          <div class="flex-grid">
+            <div class="col-xs-6">
+              <a class="btn hover-scale-inset npm full-width" @click="unpost">stop</a>
+            </div>
+            <div class="col-xs-6" style="padding-right: 19px !important;">
+              <a class="btn hover-scale-inset gitea full-width" @click="start">start</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="posting">
+        <div class="box-container secondary-flat">
+          <div id="svg">
+            <h5>{{progress}}%</h5>
+            <svg  xmlns="http://www.w3.org/2000/svg" height="200" width="200" viewBox="0 0 200 200" data-value="40">
+              <path class="bg" stroke="#ccc" d="M41 149.5a77 77 0 1 1 117.93 0"  fill="none"/>
+              <path id="progress" class="meter" stroke="#c12127" d="M41 149.5a77 77 0 1 1 117.93 0" fill="none" stroke-dasharray="350" :stroke-dashoffset="progressSVG"/>
+            </svg>
+          </div>
+          <div style="display:flex">
+            <p style="margin-right: 5px;">{{doneL}}/{{count}}</p>
+            <label>starting ...</label>
+          </div>
+        </div>
+      </div>
+    </main>
+  </body>
+  <script type="module" src="../renderer.js"></script>
+</html>

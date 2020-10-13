@@ -1,0 +1,231 @@
+@import url("https://fonts.googleapis.com/css2?family=Roboto&display=swap");
+
+* {
+  padding: 0;
+  margin: 0;
+}
+
+body {
+  font-family: "Roboto", sans-serif;
+}
+
+/* width */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #181818;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #c12127;
+  width: 10px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #ff333a;
+}
+
+#app {
+  padding: 10px;
+  height: 96.5vh;
+}
+
+#setting {
+  height: 91.5vh;
+  margin: 0;
+  display: none;
+}
+
+#addAccount {
+  margin: 40px 0;
+}
+
+#addAccount input {
+  background-color: #181818;
+}
+
+#home {
+  margin: 0;
+  display: block;
+}
+
+#home .box-container {
+  height: 81vh;
+  margin: 0;
+  max-height: 81vh;
+  overflow: auto;
+}
+
+.svg-btn {
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 85% !important;
+}
+
+.right-btn {
+  float: right;
+}
+
+.confirmJSON {
+  height: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 2;
+  display: none;
+  justify-content: center;
+  align-items: center;
+}
+
+.confirmJSON .box-container {
+  height: 20%;
+  width: 50%;
+  margin: 0;
+}
+
+.confirmJSON .btn {
+  padding: 0;
+}
+
+.confirmJSON label {
+  text-align: center;
+  margin: 20px;
+}
+
+.item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 15px 5px;
+}
+.item-content {
+  display: flex;
+  align-items: center;
+}
+
+.item img {
+  height: 80px;
+  border-radius: 10px;
+  margin-right: 20px;
+}
+
+.editItem {
+  height: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 2;
+  display: none;
+  justify-content: center;
+  align-items: center;
+}
+
+.editItem .box-container {
+  height: 85%;
+  width: 80%;
+  margin: 0;
+}
+
+.editItem input {
+  background-color: #181818;
+}
+
+.editItem textarea {
+  background-color: #181818;
+  height: 105px;
+}
+
+.editItem a {
+  margin: 0;
+}
+
+#close {
+  position: fixed;
+  height: 35px;
+  width: 35px !important;
+  top: 6%;
+  right: 10%;
+}
+
+.beforePosting {
+  height: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 2;
+  display: none;
+  justify-content: center;
+  align-items: center;
+}
+
+.beforePosting .box-container {
+  height: 25%;
+  width: 50%;
+  margin: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.beforePosting input {
+  background-color: #181818;
+}
+
+.posting {
+  height: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 2;
+  display: none;
+  justify-content: center;
+  align-items: center;
+}
+
+.posting .box-container {
+  height: 50%;
+  width: 50%;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+#svg {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+svg path {
+  will-change: auto;
+  stroke-width: 20px;
+  stroke-miterlimit: round;
+  transition: stroke-dashoffset 850ms ease-in-out;
+}
+
+#svg h5 {
+  position: fixed;
+  top: 45%;
+}
