@@ -176,7 +176,7 @@ ipcMain.on("post-pin", async (e, arg) => {
 
         const [fileChooser] = await Promise.all([
           page.waitForFileChooser(),
-          page.click("#media-upload-input"),
+          page.click("[id^='media-upload-input']"),
         ]);
         await fileChooser.accept([
           `../images/image-${j}.${
@@ -236,6 +236,8 @@ ipcMain.on("post-pin", async (e, arg) => {
 
           const { name: shortID } = await resp.json();
 
+          await page.keyboard.press("Tab");
+          await page.waitFor(500);
           await page.keyboard.press("Tab");
           await page.waitFor(500);
           mainWindow.webContents.send("update", `entering the url`);
