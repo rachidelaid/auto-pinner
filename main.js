@@ -204,19 +204,21 @@ ipcMain.on("post-pin", async (e, arg) => {
         );
         await page.keyboard.type(newString, { delay: 10 });
 
-        if (list.link.includes('amzn.to')) {
+        if (list.link.includes("fiverr")) {
           const resp = await fetch("https://selffast.com/url", {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
             },
             body: JSON.stringify({
-              url: list.link,
+              url: `https://track.fiverr.com/visit/?bta=${arg.affiliateID}&brand=fiverrcpa&landingPage=${list.link}`,
             }),
           });
 
           const { name: shortID } = await resp.json();
 
+          await page.keyboard.press("Tab");
+          await page.waitFor(500);
           await page.keyboard.press("Tab");
           await page.waitFor(500);
           mainWindow.webContents.send("update", `entering the url`);
@@ -230,12 +232,11 @@ ipcMain.on("post-pin", async (e, arg) => {
               "Content-Type": "application/json",
             },
             body: JSON.stringify({
-              url: `https://track.fiverr.com/visit/?bta=${arg.affiliateID}&brand=fiverrcpa&landingPage=${list.link}`,
+              url: list.link,
             }),
           });
 
           const { name: shortID } = await resp.json();
-
           await page.keyboard.press("Tab");
           await page.waitFor(500);
           await page.keyboard.press("Tab");
