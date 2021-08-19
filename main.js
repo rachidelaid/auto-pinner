@@ -205,7 +205,7 @@ ipcMain.on("post-pin", async (e, arg) => {
         await page.keyboard.type(newString, { delay: 10 });
 
         if (list.link.includes("fiverr")) {
-          const resp = await fetch("https://selffast.com/url", {
+          const resp = await fetch("https://dealsingo.com/url", {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
@@ -222,11 +222,11 @@ ipcMain.on("post-pin", async (e, arg) => {
           await page.keyboard.press("Tab");
           await page.waitFor(500);
           mainWindow.webContents.send("update", `entering the url`);
-          await page.keyboard.type(`https://www.selffast.com/${shortID}`, {
+          await page.keyboard.type(`https://dealsingo.com/${shortID}`, {
             delay: 50,
           });
         } else {
-          const resp = await fetch("https://selffast.com/url", {
+          const resp = await fetch("https://dealsingo.com/url", {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
@@ -242,7 +242,7 @@ ipcMain.on("post-pin", async (e, arg) => {
           await page.keyboard.press("Tab");
           await page.waitFor(500);
           mainWindow.webContents.send("update", `entering the url`);
-          await page.keyboard.type(`https://www.selffast.com/${shortID}`, {
+          await page.keyboard.type(`https://dealsingo.com/${shortID}`, {
             delay: 50,
           });
         }
