@@ -20,11 +20,13 @@
     "electron": "^10.1.1"
   },
   "dependencies": {
+    "base-64": "^1.0.0",
     "image-downloader": "^4.0.1",
     "lowdb": "^1.0.0",
     "node-fetch": "^2.6.1",
     "puppeteer-core": "^5.2.1",
-    "puppeteer-in-electron": "^3.0.3"
+    "puppeteer-in-electron": "^3.0.3",
+    "request-image-size": "^2.2.0"
   },
   "build": {
     "appId": "auto-pinner",

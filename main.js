@@ -2,6 +2,8 @@
 const { app, BrowserWindow, ipcMain, Notification } = require("electron");
 const fetch = require("node-fetch");
 const fs = require("fs");
+const requestImageSize = require("request-image-size");
+const base64 = require("base-64");
 
 const download = require("image-downloader");
 
@@ -116,9 +118,36 @@ ipcMain.on("post-pin", async (e, arg) => {
     );
     ////////////////////////////////////////////////////////////////////////////////
     for (let j = 0; j < arg.data.length; j++) {
+      const list = arg.data[j];
       try {
-        const list = arg.data[j];
-
+        mainWindow.webContents.send("update", `downloading the image`);
+        const size = await requestImageSize(list.img);
+        if (size.width >= 200 && size.height >= 300) {
+          await download.image({
+            url: list.img,
+            dest: `../images/image-${j}.${
+              list.img.split(".")[list.img.split(".").length - 1]
+            }`,
+          });
+        } else {
+          await page.goto(list.img, {
+            timeout: 0,
+          });
+          await page.evaluate(() => {
+            document.querySelector("img").height = 300;
+            document.querySelector("img").width = 300;
+          });
+          const img = await page.waitForSelector("img");
+          await img.screenshot({
+            path: `../images/image-${j}.${
+              list.img.split(".")[list.img.split(".").length - 1]
+            }`,
+          });
+        }
+      } catch (error) {
+        console.log(error);
+      }
+      try {
         mainWindow.webContents.send("update", `creating a pin`);
         await page.goto("https://www.pinterest.com/pin-builder/", {
           timeout: 0,
@@ -167,13 +196,6 @@ ipcMain.on("post-pin", async (e, arg) => {
         }, bd);
 
         mainWindow.webContents.send("update", `uploading the image`);
-        await download.image({
-          url: list.img,
-          dest: `../images/image-${j}.${
-            list.img.split(".")[list.img.split(".").length - 1]
-          }`,
-        });
-
         const [fileChooser] = await Promise.all([
           page.waitForFileChooser(),
           page.click("[id^='media-upload-input']"),
@@ -204,47 +226,94 @@ ipcMain.on("post-pin", async (e, arg) => {
         );
         await page.keyboard.type(newString, { delay: 10 });
 
+        const today = new Date();
+        const date =
+          today.getFullYear() +
+          "-" +
+          (today.getMonth() + 1) +
+          "-" +
+          today.getDate();
         if (list.link.includes("fiverr")) {
-          const resp = await fetch("https://dealsingo.com/url", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              url: `https://track.fiverr.com/visit/?bta=${arg.affiliateID}&brand=fiverrcpa&landingPage=${list.link}`,
-            }),
-          });
+          if (arg.shortLink === "true") {
+            const resp = await fetch("https://dealsingo.com/api/url", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                Authorization:
+                  "Basic " + base64.encode("adminDI:dV8E,W25PBet%>_"),
+              },
+              body: JSON.stringify({
+                link: `https://track.fiverr.com/visit/?bta=${arg.affiliateID}&brand=fiverrcpa&landingPage=${list.link}`,
+                img: list.img,
+                desc: list.desc,
+                title: list.title,
+                board: arg.board,
+                user: arg.username,
+                date,
+              }),
+            });
 
-          const { name: shortID } = await resp.json();
-
-          await page.keyboard.press("Tab");
-          await page.waitFor(500);
-          await page.keyboard.press("Tab");
-          await page.waitFor(500);
-          mainWindow.webContents.send("update", `entering the url`);
-          await page.keyboard.type(`https://dealsingo.com/${shortID}`, {
-            delay: 50,
-          });
+            const { name: shortID } = await resp.json();
+            await page.keyboard.press("Tab");
+            await page.waitFor(500);
+            await page.keyboard.press("Tab");
+            await page.waitFor(500);
+            mainWindow.webContents.send("update", `entering the url`);
+            await page.keyboard.type(`https://dealsingo.com/${shortID}`, {
+              delay: 50,
+            });
+          } else {
+            await page.keyboard.press("Tab");
+            await page.waitFor(500);
+            await page.keyboard.press("Tab");
+            await page.waitFor(500);
+            mainWindow.webContents.send("update", `entering the url`);
+            await page.keyboard.type(
+              `https://track.fiverr.com/visit/?bta=${arg.affiliateID}&brand=fiverrcpa&landingPage=${list.link}`,
+              {
+                delay: 50,
+              }
+            );
+          }
         } else {
-          const resp = await fetch("https://dealsingo.com/url", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              url: list.link,
-            }),
-          });
+          if (arg.shortLink === "true") {
+            const resp = await fetch("https://dealsingo.com/api/url", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                Authorization:
+                  "Basic " + base64.encode("adminDI:dV8E,W25PBet%>_"),
+              },
+              body: JSON.stringify({
+                link: list.link,
+                img: list.img,
+                desc: list.desc,
+                title: list.title,
+                board: arg.board,
+                user: arg.username,
+                date,
+              }),
+            });
 
-          const { name: shortID } = await resp.json();
-          await page.keyboard.press("Tab");
-          await page.waitFor(500);
-          await page.keyboard.press("Tab");
-          await page.waitFor(500);
-          mainWindow.webContents.send("update", `entering the url`);
-          await page.keyboard.type(`https://dealsingo.com/${shortID}`, {
-            delay: 50,
-          });
+            const { name: shortID } = await resp.json();
+            await page.keyboard.press("Tab");
+            await page.waitFor(500);
+            await page.keyboard.press("Tab");
+            await page.waitFor(500);
+            mainWindow.webContents.send("update", `entering the url`);
+            await page.keyboard.type(`https://dealsingo.com/${shortID}`, {
+              delay: 50,
+            });
+          } else {
+            await page.keyboard.press("Tab");
+            await page.waitFor(500);
+            await page.keyboard.press("Tab");
+            await page.waitFor(500);
+            mainWindow.webContents.send("update", `entering the url`);
+            await page.keyboard.type(list.link, {
+              delay: 50,
+            });
+          }
         }
 
         await page.evaluate(() => {
@@ -258,14 +327,13 @@ ipcMain.on("post-pin", async (e, arg) => {
           await page.waitForFunction(
             () => !document.querySelector('svg[aria-label="Saving Pin..."]')
           );
-
-          const sec = parseInt(arg.delay) + Math.floor(Math.random() * 10) + 1;
-          mainWindow.webContents.send("update", `waiting ${sec} seconds`);
-          mainWindow.webContents.send("progress", list.link);
-          await page.waitFor(sec * 1000);
         } catch (err) {
-          mainWindow.webContents.send("error", err);
+          console.log(err);
         }
+        const sec = parseInt(arg.delay) + Math.floor(Math.random() * 10) + 1;
+        mainWindow.webContents.send("update", `waiting ${sec} seconds`);
+        mainWindow.webContents.send("progress", list.link);
+        await page.waitFor(sec * 1000);
       } catch (error) {
         mainWindow.webContents.send("error", error);
       }

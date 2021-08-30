@@ -7,6 +7,7 @@
 
 body {
   font-family: "Roboto", sans-serif;
+  overflow: hidden;
 }
 
 /* width */
@@ -31,8 +32,8 @@ body {
 }
 
 #app {
-  padding: 10px;
-  height: 96.5vh;
+  padding: 8px;
+  height: 100vh;
 }
 
 #setting {
@@ -42,7 +43,7 @@ body {
 }
 
 #addAccount {
-  margin: 40px 0;
+  margin: 20px 0;
 }
 
 #addAccount input {
@@ -134,7 +135,7 @@ body {
 }
 
 .editItem .box-container {
-  height: 85%;
+  height: 87%;
   width: 80%;
   margin: 0;
 }
@@ -156,7 +157,7 @@ body {
   position: fixed;
   height: 35px;
   width: 35px !important;
-  top: 6%;
+  top: 5%;
   right: 10%;
 }
 
@@ -228,4 +229,29 @@ svg path {
 #svg h5 {
   position: fixed;
   top: 45%;
+}
+
+.grid {
+  display: grid;
+}
+
+.grid-cols-2 {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.gap-2 {
+  gap: 2em;
+}
+
+.flex {
+  display: flex;
+  align-items: center;
+}
+
+.flex p:last-child {
+  cursor: pointer;
+}
+
+.flex p:last-child:hover {
+  color: #c12127;
 }

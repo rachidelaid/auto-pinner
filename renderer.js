@@ -26,6 +26,20 @@ new Vue({
     };
   },
   methods: {
+    removedubs() {
+      const filteredArr = [],
+        uniq = [];
+
+      this.lists.forEach((el) => {
+        if (uniq.indexOf(el.img) < 0) {
+          filteredArr.push(el);
+          uniq.push(el.img);
+        }
+      });
+
+      this.lists = filteredArr;
+      db.set("data", filteredArr).write();
+    },
     addAccount() {
       if (this.pinUsername != null && this.pinPassword != null) {
         const obj = {
@@ -41,6 +55,14 @@ new Vue({
 
         this.pinPassword = null;
         this.pinUsername = null;
+      }
+    },
+    deleteAccount() {
+      for (let i = 0; i < this.accounts.length; i++) {
+        const elm = this.accounts[i];
+        if (document.querySelector("#accounts").value === elm.user) {
+          this.accounts.splice(i, 1);
+        }
       }
     },
     closeSetting() {
@@ -65,6 +87,12 @@ new Vue({
       const hide = document.querySelector("#hidden").value;
       //localStorage.setItem("hidden", hide);
       db.set("settings.hidden", hide).write();
+
+      const shortLink = document.querySelector("#shortLink").value;
+      //localStorage.setItem("shortLink", shortLink);
+      db.set("settings.shortLink", shortLink).write();
+
+      db.set("settings.accounts", JSON.stringify(this.accounts)).write();
 
       document.querySelector("#setting").style.display = "none";
       document.querySelector("#home").style.display = "block";
@@ -98,8 +126,10 @@ new Vue({
 
       document.querySelector("#jsonInput").addEventListener("change", (e) => {
         const data = require(e.target.files[0].path);
-        
-        db.get("data").push(...data).write();
+
+        db.get("data")
+          .push(...data)
+          .write();
 
         this.lists = [];
         this.lists = db.get("data").value();
@@ -164,6 +194,7 @@ new Vue({
 
         ipcRenderer.send("post-pin", {
           hidden: document.querySelector("#hidden").value,
+          shortLink: document.querySelector("#shortLink").value,
           affiliateID: this.affiliateID,
           data: this.lists,
           board: this.boardUrl,
@@ -203,6 +234,12 @@ new Vue({
     if (settings.hidden) {
       setTimeout(() => {
         document.querySelector("#hidden").value = settings.hidden;
+      }, 100);
+    }
+
+    if (settings.shortLink) {
+      setTimeout(() => {
+        document.querySelector("#shortLink").value = settings.shortLink;
       }, 100);
     }
 
