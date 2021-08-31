@@ -3,7 +3,6 @@ const { app, BrowserWindow, ipcMain, Notification } = require("electron");
 const fetch = require("node-fetch");
 const fs = require("fs");
 const requestImageSize = require("request-image-size");
-const base64 = require("base-64");
 
 const download = require("image-downloader");
 
@@ -239,8 +238,7 @@ ipcMain.on("post-pin", async (e, arg) => {
               method: "POST",
               headers: {
                 "Content-Type": "application/json",
-                Authorization:
-                  "Basic " + base64.encode("adminDI:dV8E,W25PBet%>_"),
+                "x-api-key":"GzGcrUu9FBm8^^aU58?y3GD^=g7V9-D1-ftn!S$kNHnh%6D?L#-D1-DbmQ"
               },
               body: JSON.stringify({
                 link: `https://track.fiverr.com/visit/?bta=${arg.affiliateID}&brand=fiverrcpa&landingPage=${list.link}`,
@@ -281,8 +279,7 @@ ipcMain.on("post-pin", async (e, arg) => {
               method: "POST",
               headers: {
                 "Content-Type": "application/json",
-                Authorization:
-                  "Basic " + base64.encode("adminDI:dV8E,W25PBet%>_"),
+                "x-api-key":"GzGcrUu9FBm8^^aU58?y3GD^=g7V9-D1-ftn!S$kNHnh%6D?L#-D1-DbmQ"
               },
               body: JSON.stringify({
                 link: list.link,
