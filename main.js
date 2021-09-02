@@ -129,6 +129,10 @@ ipcMain.on("post-pin", async (e, arg) => {
             }`,
           });
         } else {
+          if (arg.resize !== "true") {
+            continue;
+          }
+
           await page.goto(list.img, {
             timeout: 0,
           });

@@ -43,7 +43,7 @@ body {
 }
 
 #addAccount {
-  margin: 20px 0;
+  margin-bottom: 15px
 }
 
 #addAccount input {
@@ -235,8 +235,8 @@ svg path {
   display: grid;
 }
 
-.grid-cols-2 {
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+.grid-cols-3 {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
 .gap-2 {
@@ -248,10 +248,10 @@ svg path {
   align-items: center;
 }
 
-.flex p:last-child {
+.top-r p {
   cursor: pointer;
 }
 
-.flex p:last-child:hover {
+.top-r p:hover {
   color: #c12127;
 }

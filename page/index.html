@@ -33,8 +33,17 @@
               v-model="affiliateID"
             />
           </div>
+          <div class="col-xs-6">
+            <label class="tooltip right" data-tooltip="separated with ' , ' if multiple">Filters</label>
+            <input
+              class="full-width"
+              type="text"
+              id="filters"
+              v-model="filters"
+            />
+          </div>
           <div class="flex">
-            <div style="width: 100%;">
+            <div style="width: 100%">
               <label for="exampleSelect">Choose an account</label>
               <select class="full-width" id="accounts">
                 <option v-for="(acc, i) in accounts" :key="i" :value="acc.user">
@@ -44,7 +53,11 @@
             </div>
             <div class="btn npm" @click="deleteAccount">Delete An Account</div>
           </div>
-          <div class="box-container secondary-flat flex-grid" id="addAccount">
+          <div
+            class="box-container secondary-flat grid grid-cols-3 gap-2"
+            id="addAccount"
+            style="align-items: center"
+          >
             <div class="col-xs-6">
               <label>email</label>
               <input
@@ -63,9 +76,7 @@
                 v-model="pinPassword"
               />
             </div>
-            <a
-              class="full-width btn hover-scale-inset highlight"
-              @click="addAccount"
+            <a class="btn hover-scale-inset highlight" @click="addAccount"
               >Add Account</a
             >
           </div>
@@ -81,7 +92,7 @@
                 v-model="delay"
               />
             </div>
-            <div class="grid grid-cols-2 gap-2 full-width">
+            <div class="grid grid-cols-3 gap-2 full-width">
               <div>
                 <label>Hide automation</label>
                 <select class="full-width" id="hidden">
@@ -92,6 +103,13 @@
               <div>
                 <label>Short Link</label>
                 <select class="full-width" id="shortLink">
+                  <option value="true">true</option>
+                  <option value="false">false</option>
+                </select>
+              </div>
+              <div>
+                <label>Resize Image</label>
+                <select class="full-width" id="resize">
                   <option value="true">true</option>
                   <option value="false">false</option>
                 </select>
@@ -108,9 +126,19 @@
       </div>
 
       <div id="home">
-        <div class="flex" style="justify-content: space-between;font-size:13px; padding-bottom: 5px;">
+        <div
+          class="flex"
+          style="
+            justify-content: space-between;
+            font-size: 13px;
+            padding-bottom: 5px;
+          "
+        >
           <p>Count: {{lists.length}}</p>
-          <p @click="removedubs">Remove Duplicate</p>
+          <div class="flex top-r">
+            <p @click="removedubs" style="margin-right: 10px;">Remove Duplicate</p>
+            <p @click="filterFn">Filter</p>
+          </div>
         </div>
         <div class="box-container highlight-flat">
           <div class="item" v-for="(list,i) in lists" :key="i">
